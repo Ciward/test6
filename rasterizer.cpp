@@ -292,9 +292,13 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t, const std::array<Eig
         min_y = std::min(v[i].y(), min_y);
         max_y = std::max(v[i].y(), max_y);
     }
+    int x_min = std::floor(min_x);
+    int x_max = std::ceil(max_x);
+    int y_min = std::floor(min_y);
+    int y_max = std::ceil(max_y);
 
-    for (int i = min_x; i <= max_x; ++i) {
-        for (int j = min_y; j <= max_y; ++j) {
+    for (int i = x_min; i <= x_max; ++i) {
+        for (int j = y_min; j <= y_max; ++j) {
             if (insideTriangle(i + 0.5, j + 0.5, t.v)) {
                 //Depth interpolated
                 auto[alpha, beta, gamma] = computeBarycentric2D(i + 0.5, j + 0.5, t.v);
