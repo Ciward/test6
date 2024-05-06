@@ -346,7 +346,7 @@ int main(int argc, const char** argv)
         image.convertTo(image, CV_8UC3, 1.0f);
         cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
 
-        cv::imshow("image", image);
+        //cv::imshow("image", image);
         cv::imwrite(filename, image);
         key = cv::waitKey(10);
 
