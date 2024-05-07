@@ -399,7 +399,7 @@ int main(int argc, const char** argv)
         cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
 
         cv::imshow("image", image);
-        cv::imwrite(filename, image);
+        //cv::imwrite(filename, image);
         key = cv::waitKey(10);
 
         if (key == 'a' )
