@@ -127,7 +127,6 @@ Eigen::Vector3f texture_fragment_shader(const fragment_shader_payload& payload)
     if (payload.texture)
     {
         // TODO: Get the texture value at the texture coordinates of the current fragment
-
     }
     Eigen::Vector3f texture_color;
     texture_color << return_color.x(), return_color.y(), return_color.z();
@@ -185,7 +184,18 @@ Eigen::Vector3f phong_fragment_shader(const fragment_shader_payload& payload)
     {
         // TODO: For each light source in the code, calculate what the *ambient*, *diffuse*, and *specular* 
         // components are. Then, accumulate that result on the *result_color* object.
-        
+        Eigen::Vector3f L = (light.position - point).normalized();
+        Eigen::Vector3f N = normal.normalized();
+        Eigen::Vector3f V = (eye_pos - point).normalized();
+        //diffuse
+        float r = (light.position - point).norm();
+        Vector3f diffuse=kd.cwiseProduct(light.intensity)/(r*r)*std::max(0.0f,N.dot(L));
+        //specular
+        Vector3f h= (L+V).normalized()/((L+V).norm());
+        Vector3f specular=ks.cwiseProduct(light.intensity)/(r*r)*std::pow(std::max(0.0f,N.dot(h)),p);
+        //ambient
+        Vector3f ambient=ka.cwiseProduct(amb_light_intensity);
+        result_color+=diffuse+specular+ambient;
     }
 
     return result_color * 255.f;
@@ -233,7 +243,6 @@ Eigen::Vector3f displacement_fragment_shader(const fragment_shader_payload& payl
     {
         // TODO: For each light source in the code, calculate what the *ambient*, *diffuse*, and *specular* 
         // components are. Then, accumulate that result on the *result_color* object.
-
 
     }
 
@@ -389,7 +398,7 @@ int main(int argc, const char** argv)
         image.convertTo(image, CV_8UC3, 1.0f);
         cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
 
-        //cv::imshow("image", image);
+        cv::imshow("image", image);
         cv::imwrite(filename, image);
         key = cv::waitKey(10);
 
