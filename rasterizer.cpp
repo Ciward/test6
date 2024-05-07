@@ -315,8 +315,8 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t, const std::array<Eig
                     auto interpolated_normal = interpolate(alpha, beta, gamma, t.normal[0], t.normal[1], t.normal[2],1).normalized();
                     // texture
                     auto interpolated_texcoords = interpolate(alpha, beta, gamma, t.tex_coords[0], t.tex_coords[1],t.tex_coords[2], 1);
-                    //view_pos[] 是三角形顶点在view space中的坐标，
-                    //目的是求这个像素点的view坐标
+                    //view_pos[] 是三角形顶点在view space中的坐标
+                    //目的是求这个像素点的view space坐标(view space是模型变换和视图（相机）变换后的坐标)
                     auto interpolated_shadingcoords = interpolate(alpha, beta, gamma, view_pos[0], view_pos[1],view_pos[2], 1);
                     // 用来传递插值结果的结构体
                     fragment_shader_payload payload(interpolated_color, interpolated_normal, interpolated_texcoords,texture ? &*texture : nullptr);
