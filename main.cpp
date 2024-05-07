@@ -400,6 +400,7 @@ int main(int argc, const char** argv)
 
         cv::imshow("image", image);
         //cv::imwrite(filename, image);
+        std::cout << "frame count: " << frame_count++ << '\n';
         key = cv::waitKey(10);
 
         if (key == 'a' )
