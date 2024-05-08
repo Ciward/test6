@@ -52,7 +52,7 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
     // TODO: Use the same projection matrix from the previous assignments
     Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
     float alpha = eye_fov / 180 * MY_PI;
-    float n = -zNear, f = -zFar;
+    float n = -zFar, f = -zNear;
     float t = tan(alpha/2) * abs(n), r = t * aspect_ratio;
     float b = -t, l = -r;
     Eigen::Matrix4f p2o;
@@ -122,7 +122,7 @@ Eigen::Vector3f texture_fragment_shader(const fragment_shader_payload& payload)
     Eigen::Vector3f amb_light_intensity{10, 10, 10};
     Eigen::Vector3f eye_pos{0, 0, 10};
 
-    float p = 150;
+    float p = 40;
 
     Eigen::Vector3f color = texture_color;
     Eigen::Vector3f point = payload.view_pos;
@@ -294,7 +294,7 @@ int main(int argc, const char** argv)
 {
     std::vector<Triangle*> TriangleList;
 
-    float angle = 45;
+    float angle = 140;
     bool command_line = false;
 
     std::string filename = "output.png";
