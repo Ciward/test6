@@ -285,7 +285,7 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t, const std::array<Eig
     float min_y = height;
     float max_y = 0;
     auto v = t.toVector4();
-    // find out the bounding box of current triangle
+    // 求投影后的三角形包围盒
     for(int i = 0; i < 3; i++) {
         min_x = std::min(v[i].x(), min_x);
         max_x = std::max(v[i].x(), max_x);
