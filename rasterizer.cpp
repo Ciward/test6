@@ -302,11 +302,13 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t, const std::array<Eig
             if (insideTriangle(i + 0.5, j + 0.5, t.v)) { //在三角形内部
                 //求重心坐标
                 auto[alpha, beta, gamma] = computeBarycentric2D(i + 0.5, j + 0.5, t.v);
-
-                //直接深度插值投影时三角形重心会变，所以要使用透视校正插值, 1/w是线性的，所以可以直接插值
-                float Z = 1.0 / (alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());
-                float zp = alpha * v[0].z() / v[0].w() + beta * v[1].z() / v[1].w() + gamma * v[2].z() / v[2].w();
-                zp *= Z;
+                //直接深度插值投影时三角形重心会变，所以要使用透视校正插值
+                float Z = 1.0 / (alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w()); //归一化系数
+                // 计算矫正后的真实重心坐标
+                alpha *= Z / v[0].w();
+                beta *= Z / v[1].w();
+                gamma *= Z / v[2].w();
+                float zp = alpha * v[0].z()+ beta * v[1].z() + gamma * v[2].z();
                 //zp为屏幕深度
                 if (zp < depth_buf[get_index(i, j)]) {
                     // color
@@ -329,7 +331,7 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t, const std::array<Eig
             }
         }
     }
- 
+
 }
 
 void rst::rasterizer::set_model(const Eigen::Matrix4f& m)

@@ -106,7 +106,7 @@ Eigen::Vector3f texture_fragment_shader(const fragment_shader_payload& payload)
     if (payload.texture)
     {
         // TODO: Get the texture value at the texture coordinates of the current fragment
-        return_color = payload.texture->getColor(payload.tex_coords.x(),payload.tex_coords.y());
+        return_color = payload.texture->getColorBilinear(payload.tex_coords.x(),payload.tex_coords.y());
     }
     Eigen::Vector3f texture_color;
     texture_color << return_color.x(), return_color.y(), return_color.z();
@@ -238,8 +238,8 @@ Eigen::Vector3f displacement_fragment_shader(const fragment_shader_payload& payl
     float dU=kh*kn*(payload.texture->getColorBilinear(payload.tex_coords.x()+1.0/payload.texture->width,payload.tex_coords.y()).norm()-payload.texture->getColorBilinear(payload.tex_coords.x(),payload.tex_coords.y()).norm());
     float dV=kh*kn*(payload.texture->getColorBilinear(payload.tex_coords.x(),payload.tex_coords.y()+1.0/payload.texture->height).norm()-payload.texture->getColorBilinear(payload.tex_coords.x(),payload.tex_coords.y()).norm());
     Eigen::Vector3f ln(-dU,-dV,1);
-    point=point+kn*normal*payload.texture->getColorBilinear(payload.tex_coords.x(),payload.tex_coords.y()).norm();
     normal=(TBN*ln).normalized();
+    point=point+kn*normal*payload.texture->getColorBilinear(payload.tex_coords.x(),payload.tex_coords.y()).norm();
 
     Eigen::Vector3f result_color = {0, 0, 0};
 
@@ -422,7 +422,7 @@ int main(int argc, const char** argv)
         image.convertTo(image, CV_8UC3, 1.0f);
         cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
 
-        //cv::imshow("image", image);
+        cv::imshow("image", image);
         cv::imwrite(filename, image);
         std::cout << "frame count: " << frame_count++ << '\n';
         key = cv::waitKey(10);
